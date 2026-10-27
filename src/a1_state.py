@@ -1,8 +1,16 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Hinger Project
+Coursework 001 for: CMP-6058A Artificial Intelligence
+
+Includes a State class for Task 1
+
+@author: {group_number} (100464375, 100457714, 100500854, and 100501057)
+@date:   27/10/2026
+
 """
 
-
-
-"""
 import string
 
 class State():

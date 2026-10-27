@@ -42,7 +42,7 @@ grid = [
     [0,0,0,0,1]
 ]
 
-st = State(grid)
-print(st)
+sa = State(grid)
+print(sa)
 
-print(st.move('E'))
+print(sa.move('E'))

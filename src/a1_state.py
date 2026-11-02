@@ -6,7 +6,7 @@ Coursework 001 for: CMP-6058A Artificial Intelligence
 
 Includes a State class for Task 1
 
-@author: {group_number} (100464375, 100457714, 100500854, and 100501057)
+@author: {B26} (100464375, 100457714, 100500854, and 100501057)
 @date:   27/10/2026
 
 """
@@ -33,7 +33,10 @@ class State():
                 return "invalid"
         else:
             print("invalid char must be [A-Z]")
-        
+
+    def tester(self):
+        print(self)
+        print(sa.move('A'))
 grid = [
     [1,1,0,0,1],
     [1,1,0,0,0],
@@ -42,7 +45,6 @@ grid = [
     [0,0,0,0,1]
 ]
 
-sa = State(grid)
-print(sa)
-
-print(sa.move('E'))
+if __name__ == "__main__" :
+    sa = State(grid)
+    sa.tester()

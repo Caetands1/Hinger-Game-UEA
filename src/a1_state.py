@@ -12,39 +12,59 @@ Includes a State class for Task 1
 """
 
 import string
+import copy
 
 class State():
     def __init__(self, grid):
-        self.grid = grid
-
+        self.grid = copy.deepcopy(grid)
+        
     def __str__(self):
-        return "\n".join(str(row) for row in self.grid)
-
+        return "\n".join(" ".join(str(cell) for cell in row) for row in self.grid)
+    
     def move(self, letter):
-        valid_chars = [i for i in string.ascii_uppercase] # List of all valid chars (A-Z - Capitalised)
+        valid_chars = "ABCDEFGHIJKLMNOPQRSTUVWXY" # List of all valid chars (A-Y - Capitalised)
 
-        if type(letter) == str and letter in valid_chars: # Checks the letter is a string and if its a valid char
+        if isinstance(letter, str) and letter in valid_chars and len(letter) == 1: # Checks the letter is a string and if its a valid char
             index = ord(letter) - ord('A')
             coords = divmod(index, 5) 
             
-            if self.grid[coords[0]][coords[1]] == 1: # Checks for an active cell
-                return "valid"
+            if self.grid[coords[0]][coords[1]] > 0: # Checks for an active cell
+                self.grid[coords[0]][coords[1]] -= 1
+                return True
             else:
-                return "invalid"
+                return False
         else:
-            print("invalid char must be [A-Z]")
+            return False # INVALID CHARACTER ERROR 
 
-    def tester(self):
-        print(self)
-        print(sa.move('A'))
-grid = [
-    [1,1,0,0,1],
-    [1,1,0,0,0],
-    [0,0,1,1,1],
-    [0,0,0,1,1],
-    [0,0,0,0,1]
-]
 
-if __name__ == "__main__" :
+        
+def tester():
+    grid = [
+        [1,1,0,0,1],
+        [1,1,0,0,0],
+        [0,0,1,1,1],
+        [0,0,0,1,1],
+        [0,0,0,0,1]
+    ]
+  
     sa = State(grid)
-    sa.tester()
+    print(sa)
+    # Test cases - regular interaction (returns True/False depending on cell state)
+    print(sa.move("Y"))
+    print(sa.move("A"))
+    print(sa.move("H"))
+    # Test cases - error interactions (expecting False returns)
+    print(sa.move("e"))
+    print(sa.move("AB"))
+    print(sa.move(5))
+    # test game loop
+    """
+    user_input = input("Enter a letter [A-Z]: ")
+    while user_input:
+        print(sa.move(user_input))
+        print(sa)
+
+        user_input = input("Enter a letter [A-Z]: ")
+    """
+if __name__ == "__main__" :
+    tester()

@@ -10,8 +10,6 @@ Includes a State class for Task 1
 @date:   27/10/2026
 
 """
-
-import string
 import copy
 
 class State():
@@ -57,6 +55,7 @@ def tester():
     print(sa.move("e"))
     print(sa.move("AB"))
     print(sa.move(5))
+    print(sa)
     # test game loop
     """
     user_input = input("Enter a letter [A-Z]: ")

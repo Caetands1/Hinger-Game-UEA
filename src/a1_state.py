@@ -86,29 +86,36 @@ def tester():
     Tests: move() 
     - Tests to check the function is working as intended disallowing certain moves
     """
+    # Illegal Moves
     assert sa.move("Z") is False, "Z is an illegal move"
     assert sa.move("1") is False, "Integers are illegal moves"
     assert sa.move("e") is False, "Lowercase chars are illegal moves"
     assert sa.move("AE") is False, "Moves must be single chars"
 
+    # Legal moves
+    # First Y removes active cell
+    assert sa.move("Y") is True
+    # Second Y should return False as the cell is now inactive
+    assert sa.move("Y") is False
     """ 
     Tests: neighbours()
     - Tests to check the function is correctly returning adjacent neighbours
     """
+    sa.grid = sagrid
     neighbours_assert_msg = "Neighbours returned an incorrect number of adjacent cells"
     assert len(sa.neighbours((0,0))) == 3, neighbours_assert_msg
     assert len(sa.neighbours((0,2))) == 5, neighbours_assert_msg
     assert len(sa.neighbours((2,2))) == 8, neighbours_assert_msg 
-
+    assert sorted(sa.neighbours((0,0))) == [(0,1), (1,0), (1,1)], "Neighbours returned an incorrect result"
     """
     Tests: successors()
     - Tests to check successors is returning the correct number of State instances
     """
-    successors_list = []
-    for i in sa.successors():
-        successors_list.append(i)
+    sa.grid = sagrid
+    successors_list = list(sa.successors())
 
     assert len(successors_list) == 11, "Successors returned an invalid amount of instances"
-
+    assert sa.grid == sagrid, "Successors manipulated the grid"
+    
 if __name__ == "__main__" :
     tester()

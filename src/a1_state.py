@@ -58,7 +58,7 @@ class State():
         pass
 
 def tester():
-    s1grid = [
+    sagrid = [
         [1,1,0,0,1],
         [1,1,0,0,0],
         [0,0,1,1,1],
@@ -80,32 +80,32 @@ def tester():
     #     [0,0,0,0,0]
     #     ]
   
-    s1 = State(s1grid)
-
+    sa = State(sagrid)
+    print(sa)
     """
     Tests: move() 
     - Tests to check the function is working as intended disallowing certain moves
     """
-    assert s1.move("Z") is False, "Z is an illegal move"
-    assert s1.move("1") is False, "Integers are illegal moves"
-    assert s1.move("e") is False, "Lowercase chars are illegal moves"
-    assert s1.move("AE") is False, "Moves must be single chars"
+    assert sa.move("Z") is False, "Z is an illegal move"
+    assert sa.move("1") is False, "Integers are illegal moves"
+    assert sa.move("e") is False, "Lowercase chars are illegal moves"
+    assert sa.move("AE") is False, "Moves must be single chars"
 
     """ 
     Tests: neighbours()
     - Tests to check the function is correctly returning adjacent neighbours
     """
     neighbours_assert_msg = "Neighbours returned an incorrect number of adjacent cells"
-    assert len(s1.neighbours((0,0))) == 3, neighbours_assert_msg
-    assert len(s1.neighbours((0,2))) == 5, neighbours_assert_msg
-    assert len(s1.neighbours((2,2))) == 8, neighbours_assert_msg 
+    assert len(sa.neighbours((0,0))) == 3, neighbours_assert_msg
+    assert len(sa.neighbours((0,2))) == 5, neighbours_assert_msg
+    assert len(sa.neighbours((2,2))) == 8, neighbours_assert_msg 
 
     """
     Tests: successors()
     - Tests to check successors is returning the correct number of State instances
     """
     successors_list = []
-    for i in s1.successors():
+    for i in sa.successors():
         successors_list.append(i)
 
     assert len(successors_list) == 11, "Successors returned an invalid amount of instances"

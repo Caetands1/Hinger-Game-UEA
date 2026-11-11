@@ -34,6 +34,15 @@ class State():
         else:
             return False # INVALID CHARACTER ERROR 
 
+    def neighbours(self, cell_coords):
+        r,c = cell_coords
+        neighbours = []
+        for row, values in enumerate(self.grid):
+            for col, _ in enumerate(values):
+                if max(abs(row - r), abs(col - c)) == 1:
+                    neighbours.append((row, col))
+        return neighbours
+
     def successors(self): # successors needs to take each active cell and return a new board with each possible move
         for row, values in enumerate(self.grid):
             for col, cell in enumerate(values):
@@ -44,33 +53,42 @@ class State():
 
         
 def tester():
-    grid = [
+    s1grid = [
         [1,1,0,0,1],
         [1,1,0,0,0],
         [0,0,1,1,1],
         [0,0,0,1,1],
         [0,0,0,0,1]
     ]
+    # s2grid = [
+    #     [1,1,0,0,1],
+    #     [1,1,0,0,0],
+    #     [0,0,1,1,1],
+    #     [0,0,0,1,1],
+    #     [0,0,0,0,0]
+    #     ]
+    # s3grid= [
+    #     [1,1,0,0,1],
+    #     [1,1,0,0,0],
+    #     [0,0,0,1,1],
+    #     [0,0,0,1,1],
+    #     [0,0,0,0,0]
+    #     ]
   
-    sa = State(grid)
-    print(sa)
-    # Test cases - regular interaction (returns True/False depending on cell state)
-    print(sa.move("Y"))
-    print(sa.move("A"))
-    print(sa.move("H"))
-    # Test cases - error interactions (expecting False returns)
-    print(sa.move("e"))
-    print(sa.move("AB"))
-    print(sa.move(5))
-    print(sa)
-    # test game loop
-    """
-    user_input = input("Enter a letter [A-Z]: ")
-    while user_input:
-        print(sa.move(user_input))
-        print(sa)
+    s1 = State(s1grid)
 
-        user_input = input("Enter a letter [A-Z]: ")
+    """
+    Tests: move() 
+    - Tests to check the function is working as intended disallowing certain moves
+    """
+    assert s1.move("Z") is False, "Z is an illegal move"
+    assert s1.move("1") is False, "Integers are illegal moves"
+    assert s1.move("e") is False, "Lowercase chars are illegal moves"
+    assert s1.move("AE") is False, "Moves must be single chars"
+
+    """ 
+    Tests: neighbours()
+    - Tests to check the function is correctly returning adjacent neighbours
     """
     neighbours_assert_msg = "Neighbours returned an incorrect number of adjacent cells"
     assert len(s1.neighbours((0,0))) == 3, neighbours_assert_msg

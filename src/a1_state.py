@@ -20,14 +20,14 @@ class State():
         return "\n".join(" ".join(str(cell) for cell in row) for row in self.grid)
     
     def move(self, letter):
-        valid_chars = "ABCDEFGHIJKLMNOPQRSTUVWXY" # List of all valid chars (A-Y - Capitalised)
+        VALID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXY" # List of all valid chars (A-Y - Capitalised)
 
-        if isinstance(letter, str) and letter in valid_chars and len(letter) == 1: # Checks the letter is a string and if its a valid char
+        if isinstance(letter, str) and letter in VALID_CHARS and len(letter) == 1: # Checks the letter is a string and if its a valid char
             index = ord(letter) - ord('A')
             coords = divmod(index, 5) 
             
-            if self.grid[coords[0]][coords[1]] > 0: # Checks for an active cell
-                self.grid[coords[0]][coords[1]] -= 1
+            if self.grid[coords[0]][coords[1]] > 0:
+                self.grid[coords[0]][coords[1]] -= 1 
                 return True
             else:
                 return False
@@ -51,7 +51,12 @@ class State():
                     successor_state.move(chr(ord('A') + row * 5 + col))
                     yield successor_state     
 
-        
+    def numRegions(self):
+        pass
+
+    def numHingers(self):
+        pass
+
 def tester():
     s1grid = [
         [1,1,0,0,1],

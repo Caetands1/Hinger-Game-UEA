@@ -34,6 +34,13 @@ class State():
         else:
             return False # INVALID CHARACTER ERROR 
 
+    def successors(self): # successors needs to take each active cell and return a new board with each possible move
+        for row, values in enumerate(self.grid):
+            for col, cell in enumerate(values):
+                if cell > 0:
+                    successor_state = State(self.grid)
+                    successor_state.move(chr(ord('A') + row * 5 + col))
+                    yield successor_state     
 
         
 def tester():
@@ -65,5 +72,20 @@ def tester():
 
         user_input = input("Enter a letter [A-Z]: ")
     """
+    neighbours_assert_msg = "Neighbours returned an incorrect number of adjacent cells"
+    assert len(s1.neighbours((0,0))) == 3, neighbours_assert_msg
+    assert len(s1.neighbours((0,2))) == 5, neighbours_assert_msg
+    assert len(s1.neighbours((2,2))) == 8, neighbours_assert_msg 
+
+    """
+    Tests: successors()
+    - Tests to check successors is returning the correct number of State instances
+    """
+    successors_list = []
+    for i in s1.successors():
+        successors_list.append(i)
+
+    assert len(successors_list) == 11, "Successors returned an invalid amount of instances"
+
 if __name__ == "__main__" :
     tester()

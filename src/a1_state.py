@@ -11,6 +11,7 @@ Includes a State class for Task 1
 
 """
 import copy
+from collections import deque
 
 class State():
     def __init__(self, grid):
@@ -52,7 +53,25 @@ class State():
                     yield successor_state     
 
     def numRegions(self):
-        pass
+        region_count = 0
+        CLOSED = set()
+        for row, values in enumerate(self.grid):
+            for col, cell in enumerate(values):
+                if cell > 0 and (row,col) not in CLOSED:
+                    OPEN = deque()
+                    OPEN.append((row,col))
+                    CLOSED.add((row,col))
+
+                    region_count += 1
+                    while OPEN:
+                        u = OPEN.popleft()
+                        for neighbour in self.neighbours(u):
+                            if neighbour not in CLOSED and self.grid[neighbour[0]][neighbour[1]] > 0:
+                                OPEN.append(neighbour)
+                                CLOSED.add(neighbour)
+
+        return region_count
+
 
     def numHingers(self):
         pass
@@ -65,61 +84,79 @@ def tester():
         [0,0,0,1,1],
         [0,0,0,0,1]
     ]
-    # s2grid = [
-    #     [1,1,0,0,1],
-    #     [1,1,0,0,0],
-    #     [0,0,1,1,1],
-    #     [0,0,0,1,1],
-    #     [0,0,0,0,0]
-    #     ]
-    # s3grid= [
-    #     [1,1,0,0,1],
-    #     [1,1,0,0,0],
-    #     [0,0,0,1,1],
-    #     [0,0,0,1,1],
-    #     [0,0,0,0,0]
-    #     ]
-  
+    s2grid = [
+        [1,1,0,0,1],
+        [1,1,0,0,0],
+        [0,0,1,1,1],
+        [0,0,0,1,1],
+        [0,0,0,0,0]
+        ]
+    s3grid= [
+        [1,1,0,0,1],
+        [1,1,0,0,0],
+        [0,0,0,1,1],
+        [0,0,0,1,1],
+        [0,0,0,0,0]
+        ]
+
+    """
+    Tests: State instance creation and tostring 
+    """
     sa = State(sagrid)
     print(sa)
+
     """
     Tests: move() 
     - Tests to check the function is working as intended disallowing certain moves
     """
+    testerState = State(sagrid)
     # Illegal Moves
-    assert sa.move("Z") is False, "Z is an illegal move"
-    assert sa.move("1") is False, "Integers are illegal moves"
-    assert sa.move("e") is False, "Lowercase chars are illegal moves"
-    assert sa.move("AE") is False, "Moves must be single chars"
+    assert testerState.move("Z") is False, "Z is an illegal move"
+    assert testerState.move("1") is False, "Integers are illegal moves"
+    assert testerState.move("e") is False, "Lowercase chars are illegal moves"
+    assert testerState.move("AE") is False, "Moves must be a single char"
 
     # Legal moves
-
     # First Y removes active cell
-    assert sa.move("Y") is True
+    assert testerState.move("Y") is True
 
     # Second Y should return False as the cell is now inactive
-    assert sa.move("Y") is False
+    assert testerState.move("Y") is False
 
     """ 
     Tests: neighbours()
     - Tests to check the function is correctly returning adjacent neighbours
     """
-    sa.grid = sagrid
+    testerState = State(sagrid)
     neighbours_assert_msg = "Neighbours returned an incorrect number of adjacent cells"
-    assert len(sa.neighbours((0,0))) == 3, neighbours_assert_msg
-    assert len(sa.neighbours((0,2))) == 5, neighbours_assert_msg
-    assert len(sa.neighbours((2,2))) == 8, neighbours_assert_msg 
-    assert sorted(sa.neighbours((0,0))) == [(0,1), (1,0), (1,1)], "Neighbours returned an incorrect result"
-    
+    assert len(testerState.neighbours((0,0))) == 3, neighbours_assert_msg
+    assert len(testerState.neighbours((0,2))) == 5, neighbours_assert_msg
+    assert len(testerState.neighbours((2,2))) == 8, neighbours_assert_msg 
+    assert sorted(testerState.neighbours((0,0))) == [(0,1), (1,0), (1,1)], "Neighbours returned an incorrect result"
+
     """
     Tests: successors()
     - Tests to check successors is returning the correct number of State instances
     """
-    sa.grid = sagrid
-    successors_list = list(sa.successors())
+    testerState = State(sagrid)
+    successors_list = list(testerState.successors())
 
     assert len(successors_list) == 11, "Successors returned an invalid amount of instances"
-    assert sa.grid == sagrid, "Successors manipulated the grid"
+    assert testerState.grid == sagrid, "Successors manipulated the grid"
+
+    """
+    Tests: numRegions()
+    - Tests to check numRegions is returning the correct amount of regions
+    """
+
+    testerState = State(sagrid)
+    assert testerState.numRegions() == 2, "numRegions returned an incorrect number of regions"
+
+    testerState = State(s2grid)
+    assert testerState.numRegions() == 2, "numRegions returned an incorrect number of regions"
+
+    testerState = State(s3grid)
+    assert testerState.numRegions() == 3, "numRegions returned an incorrect number of regions"
 
 if __name__ == "__main__" :
     tester()

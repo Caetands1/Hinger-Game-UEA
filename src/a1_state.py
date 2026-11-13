@@ -35,28 +35,17 @@ class State():
         else:
             return False # INVALID CHARACTER ERROR 
 
-    def neighbours(self, cell_coords):
-        r,c = cell_coords
-        neighbours = []
-        for row, values in enumerate(self.grid):
-            for col, _ in enumerate(values):
-                if max(abs(row - r), abs(col - c)) == 1:
-                    neighbours.append((row, col))
-        return neighbours
-
     def successors(self): # successors needs to take each active cell and return a new board with each possible move
-        for row, values in enumerate(self.grid):
-            for col, cell in enumerate(values):
-                if cell > 0:
-                    successor_state = State(self.grid)
-                    successor_state.move(chr(ord('A') + row * 5 + col))
-                    yield successor_state     
+        for row, col, cell in self.cells():
+            if cell > 0:
+                successor_state = State(self.grid)
+                successor_state.move(chr(ord('A') + row * 5 + col))
+                yield successor_state     
 
     def numRegions(self):
         region_count = 0
         CLOSED = set()
-        for row, values in enumerate(self.grid):
-            for col, cell in enumerate(values):
+        for row, col, cell in self.cells():
                 if cell > 0 and (row,col) not in CLOSED:
                     OPEN = deque()
                     OPEN.append((row,col))
@@ -76,6 +65,24 @@ class State():
     def numHingers(self):
         pass
 
+    """
+    Helper functions - outside of the spec
+    """
+    def neighbours(self, cell_coords):
+        """function to get adjacent cells"""
+        r,c = cell_coords
+        neighbours = []
+        for row, col, cell in self.cells():
+                if max(abs(row - r), abs(col - c)) == 1:
+                    neighbours.append((row, col))
+        return neighbours
+
+    def cells(self):
+        """function to loop through the grid and return the (row, col) and the cell value"""
+        for row, values in enumerate(self.grid):
+            for col, cell in enumerate(values):
+                yield row, col, cell
+    
 def tester():
     sagrid = [
         [1,1,0,0,1],
@@ -148,15 +155,19 @@ def tester():
     Tests: numRegions()
     - Tests to check numRegions is returning the correct amount of regions
     """
-
+    numRegions_test_message = "numRegions returned an incorrect number of regions"
     testerState = State(sagrid)
-    assert testerState.numRegions() == 2, "numRegions returned an incorrect number of regions"
+    assert testerState.numRegions() == 2, numRegions_test_message
 
+    # This move() removes one region from the grid, numRegions should reflect this
+    testerState.move("E")
+    assert testerState.numRegions() == 1, numRegions_test_message
+    
     testerState = State(s2grid)
-    assert testerState.numRegions() == 2, "numRegions returned an incorrect number of regions"
+    assert testerState.numRegions() == 2, numRegions_test_message
 
     testerState = State(s3grid)
-    assert testerState.numRegions() == 3, "numRegions returned an incorrect number of regions"
+    assert testerState.numRegions() == 3, numRegions_test_message
 
 if __name__ == "__main__" :
     tester()

@@ -63,8 +63,13 @@ class State():
 
 
     def numHingers(self):
-        pass
-
+        current_regions = self.numRegions()
+        hinger_count = 0
+        for instance in self.successors():
+            if current_regions < instance.numRegions():
+                hinger_count += 1                 
+        return hinger_count
+    
     """
     Helper functions - outside of the spec
     """
@@ -82,7 +87,15 @@ class State():
         for row, values in enumerate(self.grid):
             for col, cell in enumerate(values):
                 yield row, col, cell
-    
+
+    def isHinger(self, row, col):
+        temp_state = State(self.grid)
+        temp_state.move(chr(ord('A') + row * 5 + col))
+        if temp_state.numRegions() > self.numRegions():
+            return True
+        else:
+            return False
+        
 def tester():
     sagrid = [
         [1,1,0,0,1],
@@ -168,6 +181,19 @@ def tester():
 
     testerState = State(s3grid)
     assert testerState.numRegions() == 3, numRegions_test_message
+    
+    """
+    Tests: numHingers() / isHinger() helper function
+    - Testing if numHingers returns the correct amount of hingers present
+    """
+    hinger_test_message = "Incorrect amount of hingers"
+    testerState = State(sagrid)
+    assert testerState.numHingers() == 2, hinger_test_message
+
+    assert testerState.isHinger(1, 1) == True, hinger_test_message
+    assert testerState.isHinger(2, 2) == True, hinger_test_message
+    assert testerState.isHinger(0, 0) == False, hinger_test_message
+    assert testerState.isHinger(0, 2) == False, hinger_test_message
 
 if __name__ == "__main__" :
     tester()

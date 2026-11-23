@@ -95,6 +95,15 @@ class State():
             return True
         else:
             return False
+
+    def is_terminal(self):
+        '''
+        return: True if the state is terminal (no valid moves left), False otherwise
+        '''
+        for row, col, cell in self.cells():
+            if cell > 0:
+                return False
+        return True
         
 def tester():
     sagrid = [

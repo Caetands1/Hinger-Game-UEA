@@ -104,6 +104,10 @@ class State():
             if cell > 0:
                 return False
         return True
+
+    def clone(self):
+        '''Return a deep copy of the current state.'''
+        return State(copy.deepcopy(self.grid))
         
 def tester():
     sagrid = [

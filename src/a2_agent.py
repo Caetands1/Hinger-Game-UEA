@@ -21,12 +21,12 @@ class Agent:
             best_score = float('-inf')
             best_move = None
 
-            for move in state.successors():
+            for letter, move in state.successorsWithMoves():
                 new_state = move
                 score = self.minimax(new_state, False)
                 if score > best_score:
                     best_score = score
-                    best_move = move
+                    best_move = letter
             return best_move
         else:
             raise NotImplementedError("This mode is not implemented yet.")

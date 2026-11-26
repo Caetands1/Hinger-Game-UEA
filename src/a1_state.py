@@ -107,7 +107,7 @@ class State():
                 cost += 1
         return cost 
 
-    def successorWithMoves(self):
+    def successorsWithMoves(self):
         for row, col, cell in self.cells():
             if cell > 0:
                 letter = self.coordsToLetter(row,col)

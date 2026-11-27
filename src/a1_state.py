@@ -39,7 +39,7 @@ class State():
         for row, col, cell in self.cells():
             if cell > 0:
                 successor_state = State(self.grid)
-                successor_state.move(chr(ord('A') + row * 5 + col))
+                successor_state.move(self.coordsToLetter(row,col))
                 yield successor_state     
 
     def numRegions(self):
@@ -90,11 +90,30 @@ class State():
 
     def isHinger(self, row, col):
         temp_state = State(self.grid)
-        temp_state.move(chr(ord('A') + row * 5 + col))
+        temp_state.move(self.coordsToLetter(row,col))
         if temp_state.numRegions() > self.numRegions():
             return True
         else:
             return False
+
+    def coordsToLetter(self, row, col):
+        """ Convert a (row, col) position to its move letter A-Y"""
+        return chr(ord('A') + row * 5 + col)
+
+    def moveCost(self, row, col):
+        cost = 0
+        for r, c in self.neighbours((row,col)):
+            if self.grid[r][c] > 0:
+                cost += 1
+        return cost 
+
+    def successorsWithMoves(self):
+        for row, col, cell in self.cells():
+            if cell > 0:
+                letter = self.coordsToLetter(row,col)
+                successor_state = State(self.grid)
+                successor_state.move(self.coordsToLetter(row,col))
+                yield letter, successor_state     
 
     def is_terminal(self):
         '''
@@ -137,7 +156,8 @@ def tester():
     """
     sa = State(sagrid)
     print(sa)
-
+    for letter, state in sa.successorWithMoves():
+        print(f"{letter}\n{state}")
     """
     Tests: move() 
     - Tests to check the function is working as intended disallowing certain moves
@@ -155,6 +175,13 @@ def tester():
 
     # Second Y should return False as the cell is now inactive
     assert testerState.move("Y") is False
+
+    """ 
+    Tests: moveCost()
+    - Tests to check movecost is checking adjacent cells for moves correctly
+    """
+
+    # to be added 
 
     """ 
     Tests: neighbours()

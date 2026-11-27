@@ -14,7 +14,7 @@ Includes an agent class for Task 2
 
 class Agent:
     '''An Agent class that models a player capable of making strategic decisions in the Hinger game.'''
-    def __init__(self, name: str = "A9", modes: list[str] = None, max_depth: int = 4):
+    def __init__(self, name: str = "B26", modes: list[str] = None, max_depth: int = 4):
         '''
         params:
             name: str - The name of the agent.
